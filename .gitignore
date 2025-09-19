@@ -7,3 +7,4 @@
 .env.local_real_device
 .env.credentials
 .env.local_emulator
+__pycache__
