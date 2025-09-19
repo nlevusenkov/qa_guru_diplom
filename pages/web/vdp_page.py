@@ -1,0 +1,80 @@
+import time
+
+import allure
+from selene import have, be, query
+from selene.support.shared import browser
+from selene.support.shared.jquery_style import ss
+
+
+class CarPage:
+
+    @allure.step('Открываем браузер на странице https://m53.ru/buy-cars/used')
+    def open(self):
+        with allure.step("браузер открыт"):
+            browser.open('/used')
+
+    @allure.step('Переходим на страницу автомобиля')
+    def open_used_vdp_page(self, car_id: str):
+        with allure.step(f'Открыли автомобиль с id {car_id}'):
+            time.sleep(4)
+            browser.element(f'#car-{car_id}').should(be.visible).click()
+
+    @allure.step('Проверяем страницу автомобиля')
+    def used_car_page_opened(self, car_id, car_model, car_title):
+        time.sleep(4)
+        with allure.step(f'Идентификатор авто: {car_id}:'):
+            browser.should(have.url_containing(car_id))  # Проверяем car_id в URL
+        with allure.step(f'Название модели: {car_model}:'):
+            browser.element('.tr-title-content').should(have.text(car_model))
+        with allure.step(f'Название заголовка: {car_title}:'):
+            browser.should(have.title_containing(car_title))
+        with allure.step('Цена присутсвует'):
+            browser.element('.tr-price-content').should(be.visible)
+
+    @allure.step('Открываем вкладку опций')
+    def open_tab_equipment(self):
+        with allure.step("Вкладка опций открыта"):
+            browser.element('[id="tab_options"]').click()
+
+    @allure.step('Проверяем заголовки опций')
+    def check_options_title(self, expected_titles):
+        # Берём тексты всех элементов (и обрезаем пробелы)
+        actual_titles = [el.get(query.text).strip() for el in ss('.tr-head .tr-h4').by(be.visible)]
+        # Проверяем количество
+        assert len(actual_titles) == len(expected_titles), \
+            f"Ожидали {len(expected_titles)} заголовков, но нашли {len(actual_titles)}: {actual_titles}"
+        # Проверяем тексты
+        with allure.step(f"Текста заголовков: {expected_titles}"):
+            assert actual_titles == expected_titles, \
+                f"Ожидали заголовки: {expected_titles}, но нашли: {actual_titles}"
+
+    @allure.step('Проверяем Название кнопки')
+    def cheack_bottom_options(self):
+        with allure.step('Смотрим название кнопки когда табы свернуты'):
+            browser.element('//*[@id="tabs"]/tr-vdp-description/div[3]/div/tr-options/div/div[2]/button').should(
+                have.text("Посмотреть все опции"))
+        with allure.step('Нажимаем на кнопку'):
+            browser.element('//*[@id="tabs"]/tr-vdp-description/div[3]/div/tr-options/div/div[2]/button').click()
+        with allure.step('Смотрим название кнопки когда табы открыты'):
+            browser.element('//*[@id="tabs"]/tr-vdp-description/div[3]/div/tr-options/div/div[2]/button').should(
+                have.text("Свернуть все опции"))
+
+    def open_credit_form(self):
+        with allure.step("Открыли форму отправки заявки"):
+            browser.element('.tr-credit-button').click()
+
+    def fill_credit_form(self, name, number):
+        browser.element(
+            '/html/body/tr-modal-window/div/div/tr-modal-outlet/ng-component/tr-credit-common/tr-credit-modal/tr-modal-layout/div[2]/div/tr-credit-calculator-form-full/div[1]/div[2]/div[1]/tr-approval-form/form/div[1]/div[1]/tr-control/div[2]/input').click().type(
+            name)
+        browser.element(
+            '/html/body/tr-modal-window/div/div/tr-modal-outlet/ng-component/tr-credit-common/tr-credit-modal/tr-modal-layout/div[2]/div/tr-credit-calculator-form-full/div[1]/div[2]/div[1]/tr-approval-form/form/div[1]/div[2]/tr-control/div[2]/tr-input-phone/input').click().type(
+            number)
+        browser.element(
+            '/html/body/tr-modal-window/div/div/tr-modal-outlet/ng-component/tr-credit-common/tr-credit-modal/tr-modal-layout/div[2]/div/tr-credit-calculator-form-full/div[1]/div[2]/div[1]/tr-approval-form/form/div[2]/div/tr-agreement-block/tr-legal-block[1]/div/div/tr-checkbox').click()
+        browser.element('//*[@id="credit_blockused_vdp"]/tr-modal-layout/div[3]/div[1]/button').click()
+
+    def check_open_thanks_modal(self):
+        browser.element('[class*="tr-block tr-size-md tr-fill-primary ng-star-inserted"]').should(be.visible)
+        browser.element('/html/body/tr-modal-window/div/div/tr-thanks-modal/tr-modal-layout/div[2]/div[2]/h2').should(
+            have.text("Ваша заявка отправлена!"))

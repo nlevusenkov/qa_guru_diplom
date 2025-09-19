@@ -1,0 +1,9 @@
+.idea
+.git
+.pytest_cache
+.venv
+.env
+.env.bstack
+.env.local_real_device
+.env.credentials
+.env.local_emulator
