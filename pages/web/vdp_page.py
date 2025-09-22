@@ -59,22 +59,17 @@ class CarPage:
             browser.element('//*[@id="tabs"]/tr-vdp-description/div[3]/div/tr-options/div/div[2]/button').should(
                 have.text("Свернуть все опции"))
 
-    def open_credit_form(self):
+    def open_callback_form(self):
         with allure.step("Открыли форму отправки заявки"):
-            browser.element('.tr-credit-button').click()
+            browser.element('[class*="tr-block tr-size-lg tr-fill-secondary ng-star-inserted"]').should(be.visible).click()
 
-    def fill_credit_form(self, name, number):
-        browser.element(
-            '/html/body/tr-modal-window/div/div/tr-modal-outlet/ng-component/tr-credit-common/tr-credit-modal/tr-modal-layout/div[2]/div/tr-credit-calculator-form-full/div[1]/div[2]/div[1]/tr-approval-form/form/div[1]/div[1]/tr-control/div[2]/input').click().type(
-            name)
-        browser.element(
-            '/html/body/tr-modal-window/div/div/tr-modal-outlet/ng-component/tr-credit-common/tr-credit-modal/tr-modal-layout/div[2]/div/tr-credit-calculator-form-full/div[1]/div[2]/div[1]/tr-approval-form/form/div[1]/div[2]/tr-control/div[2]/tr-input-phone/input').click().type(
-            number)
-        browser.element(
-            '/html/body/tr-modal-window/div/div/tr-modal-outlet/ng-component/tr-credit-common/tr-credit-modal/tr-modal-layout/div[2]/div/tr-credit-calculator-form-full/div[1]/div[2]/div[1]/tr-approval-form/form/div[2]/div/tr-agreement-block/tr-legal-block[1]/div/div/tr-checkbox').click()
-        browser.element('//*[@id="credit_blockused_vdp"]/tr-modal-layout/div[3]/div[1]/button').click()
+    def fill_callback_form(self, name, number):
+        browser.element('.tr-modal input[formcontrolname="name"]').type(name)
+        browser.element('.tr-modal input[autocomplete="tel"]').type(number)
+        browser.element('.tr-modal .tr-agreement-checkbox').click()
+        browser.element('.tr-modal .tr-middle-slot').click()
 
     def check_open_thanks_modal(self):
-        browser.element('[class*="tr-block tr-size-md tr-fill-primary ng-star-inserted"]').should(be.visible)
-        browser.element('/html/body/tr-modal-window/div/div/tr-thanks-modal/tr-modal-layout/div[2]/div[2]/h2').should(
-            have.text("Ваша заявка отправлена!"))
+        browser.element('/html/body/tr-modal-window/div/div/tr-thanks-modal').should(be.visible)
+        browser.element('/html/body/tr-modal-window/div/div/tr-thanks-modal/tr-modal-layout/div[2]/div[2]/h2').should(have.text('Ваша заявка отправлена!'))
+

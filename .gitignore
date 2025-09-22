@@ -8,3 +8,7 @@
 .env.credentials
 .env.local_emulator
 __pycache__
+allure-results
+.env.*
+/notifications/
+/allure-report/

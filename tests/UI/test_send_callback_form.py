@@ -11,11 +11,11 @@ from pages.web.vdp_page import CarPage
 @allure.story("VDP page")
 def test_form():
     car_page = CarPage()
-    car_id = "u2983271"
+    car_id = "u3013249"
     name = "тест"
     number = "79999999999"
     car_page.open()
     car_page.open_used_vdp_page(car_id)
-    car_page.open_credit_form()
-    car_page.fill_credit_form(name, number)
+    car_page.open_callback_form()
+    car_page.fill_callback_form(name, number)
     car_page.check_open_thanks_modal()
