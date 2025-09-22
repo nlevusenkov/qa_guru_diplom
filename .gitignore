@@ -10,5 +10,4 @@
 __pycache__
 allure-results
 .env.*
-/notifications/
 /allure-report/
