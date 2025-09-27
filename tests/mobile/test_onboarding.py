@@ -6,7 +6,7 @@ from selene import browser, have, be
 
 @allure.tag('mobile')
 @allure.severity(Severity.NORMAL)
-@allure.label('owner', 'fgoncharenko')
+@allure.label('owner', 'nlevusenkov')
 @allure.feature('Онбординг')
 @allure.title('Проверка текста онбординг скрина')
 def test_onboarding_texts():

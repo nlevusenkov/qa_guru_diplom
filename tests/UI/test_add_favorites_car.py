@@ -11,9 +11,9 @@ from pages.web.favorites_page import FavoritesPage
 @allure.feature("Проверка добавления авто в избранное")
 @allure.story("Страница избранных")
 def test_add_car_to_favorites():
-    test_car_id = "u3012281"
-    brand = "toyota"
-    model = "rav4-2010"
+    test_car_id = "u3014377"
+    brand = "lada"
+    model = "2105"
     car_page = FavoritesPage()
 
     car_page.open_main_page()

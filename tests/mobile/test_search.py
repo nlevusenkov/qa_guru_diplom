@@ -6,7 +6,7 @@ from allure_commons.types import Severity
 
 @allure.tag('mobile')
 @allure.severity(Severity.NORMAL)
-@allure.label('owner', 'fgoncharenko')
+@allure.label('owner', 'nlevusenkov')
 @allure.feature('Поиск')
 @allure.title('Проверка поиска статьи')
 def test_search():

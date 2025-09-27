@@ -9,7 +9,7 @@ class FavoritesPage:
     @allure.step('Открываем главную страницу')
     def open_main_page(self):
         with allure.step('Открыли главную страницу'):
-            browser.open('/used')
+            browser.open('/used?order=price')
             time.sleep(5)
 
     @allure.step('Найти карточку автомобиля')
@@ -27,7 +27,7 @@ class FavoritesPage:
         with allure.step(f'Кликаем на кнопку избранного автомобиля {car_id}'):
             favorites_button = self.find_favorites_button_in_card(car_id)
             favorites_button.click()
-            time.sleep(2)
+            browser.execute_script("window.scrollTo(0, 0);")
 
     def open_favorites_page(self):
         with allure.step('Открыли страницу с избранными авто'):

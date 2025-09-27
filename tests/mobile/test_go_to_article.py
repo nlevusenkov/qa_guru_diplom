@@ -6,6 +6,7 @@ from selene import browser, have
 
 @allure.story('Проверки приветственных страниц Wikipedia')
 @allure.severity(allure.severity_level.NORMAL)
+@allure.label('owner', 'nlevusenkov')
 @allure.tag('Mobile')
 def test_skip_pages():
     with step('Проверить текст на первой странице'):

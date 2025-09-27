@@ -11,7 +11,7 @@ from pages.web.vdp_page import CarPage
 @allure.story("VDP page")
 def test_form():
     car_page = CarPage()
-    car_id = "u3013249"
+    car_id = "u3002728"
     name = "тест"
     number = "79999999999"
     car_page.open()

@@ -11,7 +11,7 @@ class CarPage:
     @allure.step('Открываем браузер на странице https://m53.ru/buy-cars/used')
     def open(self):
         with allure.step("браузер открыт"):
-            browser.open('/used')
+            browser.open('/used?order=price')
 
     @allure.step('Переходим на страницу автомобиля')
     def open_used_vdp_page(self, car_id: str):
@@ -38,9 +38,7 @@ class CarPage:
 
     @allure.step('Проверяем заголовки опций')
     def check_options_title(self, expected_titles):
-        # Берём тексты всех элементов (и обрезаем пробелы)
         actual_titles = [el.get(query.text).strip() for el in ss('.tr-head .tr-h4').by(be.visible)]
-        # Проверяем количество
         assert len(actual_titles) == len(expected_titles), \
             f"Ожидали {len(expected_titles)} заголовков, но нашли {len(actual_titles)}: {actual_titles}"
         # Проверяем тексты
@@ -64,12 +62,18 @@ class CarPage:
             browser.element('[class*="tr-block tr-size-lg tr-fill-secondary ng-star-inserted"]').should(be.visible).click()
 
     def fill_callback_form(self, name, number):
-        browser.element('.tr-modal input[formcontrolname="name"]').type(name)
-        browser.element('.tr-modal input[autocomplete="tel"]').type(number)
-        browser.element('.tr-modal .tr-agreement-checkbox').click()
-        browser.element('.tr-modal .tr-middle-slot').click()
+        with allure.step(f'Заполняем Имя {name}'):
+            browser.element('.tr-modal input[formcontrolname="name"]').type(name)
+        with allure.step(f'Заполняем телефон {number}'):
+            browser.element('.tr-modal input[autocomplete="tel"]').type(number)
+        with allure.step('Проставляем чекбокс политик'):
+            browser.element('.tr-modal .tr-agreement-checkbox').click()
+        with allure.step('Отправляем форму'):
+            browser.element('.tr-modal .tr-middle-slot').click()
+
 
     def check_open_thanks_modal(self):
-        browser.element('/html/body/tr-modal-window/div/div/tr-thanks-modal').should(be.visible)
-        browser.element('/html/body/tr-modal-window/div/div/tr-thanks-modal/tr-modal-layout/div[2]/div[2]/h2').should(have.text('Ваша заявка отправлена!'))
+        with allure.step('Проверяем содержение спасибки формы'):
+            browser.element('/html/body/tr-modal-window/div/div/tr-thanks-modal').should(be.visible)
+            browser.element('/html/body/tr-modal-window/div/div/tr-thanks-modal/tr-modal-layout/div[2]/div[2]/h2').should(have.text('Ваша заявка отправлена!'))
 
