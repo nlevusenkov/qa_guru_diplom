@@ -1,12 +1,21 @@
 import os
-
+import sys
 import pytest
 from appium import webdriver
 from dotenv import load_dotenv
 from selene import browser
 
-import config
+import config as app_config
 from utils import attach
+
+
+# Добавляем корневую директорию проекта в PYTHONPATH
+# Поднимаемся на два уровня вверх от tests/mobile/ к корню проекта
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+
 
 
 def pytest_addoption(parser):
@@ -17,7 +26,7 @@ def pytest_addoption(parser):
     )
 
 
-def pytest_configure(config):
+def pytest_configure(config):  # Оставляем оригинальное имя параметра
     context = config.getoption("--context")
     env_file_path = f".env.{context}"
 
@@ -34,14 +43,14 @@ def context(request):
 
 @pytest.fixture(scope='function', autouse=True)
 def mobile_management(context):
-    options = config.to_driver_options(context=context)
+    options = app_config.to_driver_options(context=context)  # Используем переименованный импорт
 
     browser.config.driver = webdriver.Remote(options.get_capability('remote_url'), options=options)
     browser.config.timeout = 10.0
 
     yield
 
-    attach.add_screenshot()
+    attach.add_bstack_screenshot()
     attach.add_xml()
     session_id = browser.driver.session_id
 
