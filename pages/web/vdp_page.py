@@ -23,7 +23,7 @@ class CarPage:
     def used_car_page_opened(self, car_id, car_model, car_title):
         time.sleep(4)
         with allure.step(f'Идентификатор авто: {car_id}:'):
-            browser.should(have.url_containing(car_id))  # Проверяем car_id в URL
+            browser.should(have.url_containing(car_id))
         with allure.step(f'Название модели: {car_model}:'):
             browser.element('.tr-title-content').should(have.text(car_model))
         with allure.step(f'Название заголовка: {car_title}:'):
@@ -62,9 +62,9 @@ class CarPage:
             browser.element('[class*="tr-block tr-size-lg tr-fill-secondary ng-star-inserted"]').should(be.visible).click()
 
     def fill_callback_form(self, name, number):
-        with allure.step(f'Заполняем Имя {name}'):
+        with allure.step(f'Заполняем Имя: {name}'):
             browser.element('.tr-modal input[formcontrolname="name"]').type(name)
-        with allure.step(f'Заполняем телефон {number}'):
+        with allure.step(f'Заполняем телефон: {number}'):
             browser.element('.tr-modal input[autocomplete="tel"]').type(number)
         with allure.step('Проставляем чекбокс политик'):
             browser.element('.tr-modal .tr-agreement-checkbox').click()
@@ -74,6 +74,7 @@ class CarPage:
 
     def check_open_thanks_modal(self):
         with allure.step('Проверяем содержение спасибки формы'):
+            time.sleep(5)
             browser.element('/html/body/tr-modal-window/div/div/tr-thanks-modal').should(be.visible)
             browser.element('/html/body/tr-modal-window/div/div/tr-thanks-modal/tr-modal-layout/div[2]/div[2]/h2').should(have.text('Ваша заявка отправлена!'))
 
