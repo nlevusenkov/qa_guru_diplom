@@ -63,6 +63,19 @@
 ### Allure отчет
 
 #### Общие результаты
+![allure_report suites](pictures/allure-report.jpg)
 
-> тут должен быть скрин
+#### Результаты прохождения тестов
+![allure_report suites](pictures/tests.jpg)
 
+#### Графики
+![allure_graphs](pictures/graphs1.jpg)
+![allure_graphs](pictures/graphs2.jpg)
+
+### Уведомления в Телеграм
+![tg_report](pictures/tg_report.jpg)
+
+### Прохождение web автотеста
+![tg_report](pictures/autotest_video_demo_web.gif)
+### Прохождение mobile автотеста
+![tg_report](pictures/autotest_video_demo_mobile.gif)
