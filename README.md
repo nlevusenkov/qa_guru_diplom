@@ -1,9 +1,6 @@
 # Дипломный проект по автоматизации тестирования
-![main page screenshot](pictures/m53.jpg)
-
-
 ## Проект по тестированию web приложения витрина автомобилей <a target="_blank" href="https://m53.ru/buy-cars">m53.ru</a>
-
+![main page screenshot](pictures/m53.jpg)
 ---
 
 ### Список проверок, реализованных в web автотестах
@@ -19,7 +16,7 @@
 ---
 
 ## Проект по тестированию API <a target="_blank" href="https://reqres.in/api">reqres.in</a>
-
+![main page screenshot](pictures/api.jpg)
 ### Список проверок, реализованных в API автотестах
 
 1. Создание пользователя
