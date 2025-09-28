@@ -10,7 +10,7 @@ from utils import attach
 load_dotenv()
 
 
-@pytest.fixture(scope='session', autouse=True)
+@pytest.fixture(scope='function', autouse=True)
 def setting_browser():
     login = os.getenv("SELENIUM_USER")
     password = os.getenv("SELENIUM_PASS")
