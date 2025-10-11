@@ -1,5 +1,6 @@
 import json
 import os
+from pathlib import Path
 
 import allure
 import requests
@@ -7,16 +8,9 @@ from allure_commons.types import Severity
 from dotenv import load_dotenv
 from jsonschema import validate
 
-load_dotenv()
-
-base_api_url = os.getenv("BASE_API_URL")
 payload = {
     "name": "morpheus",
     "job": "leader"
-}
-headers = {
-    'x-api-key': 'reqres-free-v1',
-    'Content-Type': 'application/json'
 }
 
 
@@ -27,19 +21,17 @@ headers = {
 @allure.feature('Tests reqres.in')
 @allure.title("Создание нового пользователя")
 @allure.description("Тест проверяет создание пользователя через POST запрос с валидацией JSON схемы")
-def test_create_user():
+def test_create_user(api_client):
     with allure.step("Отправка POST запроса на создание пользователя"):
-        response = requests.post(base_api_url + '/users', headers=headers, json=payload)
+        response = api_client.post('/users', json=payload)
 
     with allure.step("Проверка статус кода ответа"):
         assert response.status_code == 201
-
-    with allure.step("Подготовка пути к JSON схеме"):
-        current_dir = os.path.dirname(os.path.abspath(__file__))  # tests/API/
-        tests_dir = os.path.dirname(current_dir)  # tests/
-        project_root = os.path.dirname(tests_dir)  # diplom_project/
-        schema_path = os.path.join(project_root, 'shemas', 'post_create_user.json')
+        assert response.json()['name'] == "morpheus"
+        assert response.json()['job'] == "leader"
 
     with allure.step("Загрузка и валидация JSON схемы"):
+        project_root = Path(__file__).parent.parent.parent
+        schema_path = project_root / 'shemas' / 'post_create_user.json'
         with open(schema_path) as file:
             validate(response.json(), schema=json.loads(file.read()))

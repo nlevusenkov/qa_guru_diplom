@@ -6,15 +6,6 @@ from allure_commons.types import Severity
 from dotenv import load_dotenv
 from jsonschema import validate
 
-load_dotenv()
-
-base_api_url = os.getenv("BASE_API_URL")
-headers = {
-    'x-api-key': 'reqres-free-v1',
-    'Content-Type': 'application/json'
-}
-
-
 @allure.epic("API Tests")
 @allure.tag("API", "DELETE")
 @allure.severity(Severity.BLOCKER)
@@ -23,9 +14,9 @@ headers = {
 @allure.story("Delete User")
 @allure.title("Удаление пользователя через DELETE запрос")
 @allure.description("Тест проверяет корректное удаление пользователя и валидацию пустого ответа")
-def test_delete_user_status_code():
+def test_delete_user_status_code(api_client):
     with allure.step("Отправка delete запроса на удаление пользователя"):
-        response = requests.delete(base_api_url + '/users2', headers=headers)
+        response = api_client.delete('/users/2')
     with allure.step("Проверка статус кода ответа"):
         assert response.status_code == 204
 
