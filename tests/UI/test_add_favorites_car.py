@@ -1,8 +1,7 @@
 import allure
 from allure_commons.types import Severity
-from selene import be
 
-from pages.web.favorites_page import FavoritesPage
+from pages.web import favorites_page
 
 
 @allure.tag("web")
@@ -11,14 +10,11 @@ from pages.web.favorites_page import FavoritesPage
 @allure.feature("Проверка добавления авто в избранное")
 @allure.story("Страница избранных")
 def test_add_car_to_favorites():
-    test_car_id = "u3014377"
-    brand = "lada"
-    model = "2105"
-    car_page = FavoritesPage()
+    test_car_id = "u3034981"
+    brand = "daewoo"
+    model = "matiz"
 
-    car_page.open_main_page()
-    car_card = car_page.find_car_card(test_car_id)
-    car_card.should(be.visible)
-    car_page.click_favorites_button_on_car(test_car_id)
-    car_page.open_favorites_page()
-    car_page.check_car_in_favorites(brand, model, test_car_id)
+    favorites_page.open_main_page()
+    favorites_page.add_car_to_favorites(test_car_id)
+    favorites_page.open_favorites_page()
+    favorites_page.should_have_car_in_favorites(brand, model, test_car_id)

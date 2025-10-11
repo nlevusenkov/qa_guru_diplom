@@ -1,8 +1,9 @@
 import os
 
+import allure_commons
 import pytest
 from dotenv import load_dotenv
-from selene import browser
+from selene import browser, support
 from selenium import webdriver
 
 from utils import attach
@@ -34,7 +35,9 @@ def setting_browser():
     browser.config.base_url = 'https://m53.ru/buy-cars'
     browser.config.window_width = 1920
     browser.config.window_height = 1080
-
+    browser.config._wait_decorator = support._logging.wait_with(
+        context=allure_commons._allure.StepContext
+    )
     yield browser
 
     attach.add_screenshot(browser)

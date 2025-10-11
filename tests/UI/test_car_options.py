@@ -1,7 +1,7 @@
 import allure
 from allure_commons.types import Severity
 
-from pages.web.vdp_page import CarPage
+from pages.web import vdp_page
 
 
 @allure.tag("web")
@@ -10,11 +10,10 @@ from pages.web.vdp_page import CarPage
 @allure.feature("Проверка опций автомобиля")
 @allure.story("VDP page")
 def test_car_options():
-    car_page = CarPage()
     car_id = "u3002728"
     expected_titles = ["Мультимедиа", "Салон", "Комфорт", "Прочее"]
-    car_page.open()
-    car_page.open_used_vdp_page(car_id)
-    car_page.open_tab_equipment()
-    car_page.check_options_title(expected_titles)
-    car_page.cheack_bottom_options()
+    vdp_page.open()
+    vdp_page.open_used_vdp_page(car_id)
+    vdp_page.open_tab_equipment()
+    vdp_page.check_options_title(expected_titles)
+    vdp_page.cheack_bottom_options()
