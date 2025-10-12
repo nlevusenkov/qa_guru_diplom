@@ -1,9 +1,8 @@
-import json
-from pathlib import Path
-
 import allure
 from allure_commons.types import Severity
-from jsonschema import validate
+from pydantic import ValidationError
+
+from models.model import UpdateUserResponse
 
 payload = {
     "name": "morpheus",
@@ -25,15 +24,13 @@ def test_update_user_status(api_client):
     with allure.step("Отправка put запроса на обновление пользователя"):
         response = api_client.put('/users/2', json=payload)
 
-    with allure.step("Загрузка и валидация JSON схемы"):
-        project_root = Path(__file__).parent.parent.parent
-        schema_path = project_root / 'shemas' / 'put_update_user.json'
-        with open(schema_path) as file:
-            validate(response.json(), schema=json.loads(file.read()))
-
-    with allure.step("Проверка статус кода ответа"):
-        assert response.status_code == 200
+    with allure.step("Валидация ответа по схеме"):
+        try:
+            UpdateUserResponse(**response)
+        except ValidationError as e:
+            import pytest
+            pytest.fail(f"Схема ответа не валидна: {e}")
 
     with allure.step("Проверка дополнительных условий ответа"):
-        assert response.json()["name"] == name
-        assert response.json()["job"] == job
+        assert response["name"] == name
+        assert response["job"] == job

@@ -1,13 +1,9 @@
-import json
-import os
-from pathlib import Path
-
 import allure
-import requests
+import pytest
 from allure_commons.types import Severity
-from dotenv import load_dotenv
-from jsonschema import validate
+from pydantic import ValidationError
 
+from models.model import ErrorResponse
 
 payload = {"email": "b9@ya.ru"}
 
@@ -20,16 +16,13 @@ payload = {"email": "b9@ya.ru"}
 @allure.title('Unsuccessful register')
 def test_unsuccessful_register(api_client):
     with allure.step("Отправка post запроса на не успешную регистрацию пользователя"):
-        user_register = api_client.post('/register', json=payload)
+        user_register = api_client.post('/register', json=payload, expected_status=400)
 
-    with allure.step("Проверка статус кода ответа"):
-        assert user_register.status_code == 400
-
-    with allure.step("Загрузка и валидация JSON схемы"):
-        project_root = Path(__file__).parent.parent.parent
-        schema_path = project_root / 'shemas' / 'unsuccessful_register.json'
-        with open(schema_path) as file:
-            validate(user_register.json(), schema=json.loads(file.read()))
+    with allure.step("Валидация ответа по схеме"):
+        try:
+            ErrorResponse(**user_register)
+        except ValidationError as e:
+            pytest.fail(f"Схема ответа не валидна: {e}")
 
     with allure.step("Проверка дополнительных условий ответа"):
-        assert user_register.json()['error'] == 'Missing password'
+        assert user_register['error'] == 'Missing password'

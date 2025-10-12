@@ -1,12 +1,9 @@
-import json
-import os
-from pathlib import Path
-
 import allure
-import requests
+import pytest
 from allure_commons.types import Severity
-from dotenv import load_dotenv
-from jsonschema import validate
+from pydantic import ValidationError
+
+from models.model import UsersResponse
 
 
 @allure.epic("API Tests")
@@ -21,11 +18,8 @@ def test_list_users(api_client):
     with allure.step("Отправка get запроса на получение списка пользователей"):
         response = api_client.get('/users', params={'page': 2})
 
-    with allure.step("Проверка статус кода ответа"):
-        assert response.status_code == 200
-
-    with allure.step("Загрузка и валидация JSON схемы"):
-        project_root = Path(__file__).parent.parent.parent
-        schema_path = project_root / 'shemas' / 'get_users.json'
-        with open(schema_path) as file:
-            validate(response.json(), schema=json.loads(file.read()))
+    with allure.step("Валидация ответа по схеме"):
+        try:
+            UsersResponse(**response)
+        except ValidationError as e:
+            pytest.fail(f"Схема ответа не валидна: {e}")

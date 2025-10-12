@@ -2,9 +2,11 @@ pytest==8.0.2
 allure-pytest==2.13.2
 selene>=2.0.b8
 python-dotenv==1.0.1
-jsonschema==4.21.1
+jsonschema~=4.25.1
 requests==2.32.5
 Appium-Python-Client==5.2.4
 pydantic-settings==2.10.1
 selenium==4.33.0
 webdriver-manager>=4.0.0
+config~=0.5.1
+pydantic~=2.11.9

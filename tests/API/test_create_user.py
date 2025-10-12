@@ -3,10 +3,14 @@ import os
 from pathlib import Path
 
 import allure
+import pytest
 import requests
 from allure_commons.types import Severity
 from dotenv import load_dotenv
 from jsonschema import validate
+from pydantic import ValidationError
+
+from models.model import UserResponse
 
 payload = {
     "name": "morpheus",
@@ -25,13 +29,12 @@ def test_create_user(api_client):
     with allure.step("Отправка POST запроса на создание пользователя"):
         response = api_client.post('/users', json=payload)
 
-    with allure.step("Проверка статус кода ответа"):
-        assert response.status_code == 201
-        assert response.json()['name'] == "morpheus"
-        assert response.json()['job'] == "leader"
+    with allure.step("Проверка данных ответа"):
+        assert response['name'] == "morpheus"
+        assert response['job'] == "leader"
 
-    with allure.step("Загрузка и валидация JSON схемы"):
-        project_root = Path(__file__).parent.parent.parent
-        schema_path = project_root / 'shemas' / 'post_create_user.json'
-        with open(schema_path) as file:
-            validate(response.json(), schema=json.loads(file.read()))
+    with allure.step("Валидация ответа по схеме"):
+        try:
+            UserResponse(**response)
+        except ValidationError as e:
+            pytest.fail(f"Схема ответа не валидна: {e}")
