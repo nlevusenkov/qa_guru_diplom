@@ -1,7 +1,7 @@
 import allure
-from appium.webdriver.common.appiumby import AppiumBy
-from selene import browser, have, be
 from allure_commons.types import Severity
+from appium.webdriver.common.appiumby import AppiumBy
+from selene import browser, have
 
 
 @allure.tag('mobile')
