@@ -1,6 +1,5 @@
 import allure
 from allure_commons.types import Severity
-from jsonschema import validate
 
 
 @allure.epic("API Tests")

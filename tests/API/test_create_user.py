@@ -1,13 +1,6 @@
-import json
-import os
-from pathlib import Path
-
 import allure
 import pytest
-import requests
 from allure_commons.types import Severity
-from dotenv import load_dotenv
-from jsonschema import validate
 from pydantic import ValidationError
 
 from models.model import UserResponse
